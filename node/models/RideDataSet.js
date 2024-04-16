@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
+// ride dataset
 const rideDataSetSchema = mongoose.Schema({
   name: String,
   dataset: [mongoose.Mixed]

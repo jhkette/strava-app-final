@@ -1,6 +1,6 @@
 const { Client } = require("strava-oauth2");
-// require('dotenv').config({path: './.env'})
 
+// middleware for strava oauth config and create client object
 const config = {
     authorization_uri: 'https://www.strava.com/api/v3/oauth/authorize',
     token_uri: 'https://www.strava.com/api/v3/oauth/token',

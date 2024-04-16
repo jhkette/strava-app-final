@@ -26,7 +26,7 @@ export default function RunchartRegression({ userRecords, event, regdata }) {
   let my_regression;
   let prediction;
   if (userRecords.runningpbs["5000"]) {
-    my_regression = regression.linear(regData);
+    my_regression = regression.linear(regData); //create linear regression
 
     prediction = my_regression.predict(userRecords.runningpbs["5000"])[1];
   }

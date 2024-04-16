@@ -75,7 +75,7 @@ export default function RidechartRegression({
     formattedPred,
     sorted
 
-
+   // I need to check there is data first, passed in as props
   if (regdata.length) {
     regData = regdata[0]["dataset"].map(({ x, y }) => {
       return [parseFloat(x), parseInt(y)]; //  need a list of [[x1, y1], [x2, y2], ...]
@@ -101,7 +101,7 @@ export default function RidechartRegression({
   }
 
   useEffect(() => {
-    if (!regdata) {
+    if (!regdata) { // if there is no props data return
       return;
     }
     if (chartInstance.current) {
@@ -110,7 +110,7 @@ export default function RidechartRegression({
     if (chartRef.current !== null) {
       const myChartRef = chartRef.current.getContext("2d");
 
-      // create  a new chart
+      // create  a new chart with the options  defined below
       chartInstance.current = new Chart(myChartRef, {
         type: "scatter",
         data: {
@@ -146,7 +146,7 @@ export default function RidechartRegression({
           responsive: true,
           plugins: {
             tooltip: {
-              enabled: false, // <-- this option disables tooltips
+              enabled: false, 
             },
             annotation: {
               annotations: {
@@ -238,9 +238,10 @@ export default function RidechartRegression({
       };
     }
   }, [finalScatter, regdata, sorted, prediction, predWkg]);
-
+   // ternary operator to check for the initial regression data
   return regdata.length ? (
     <div className="w-11/12 bg-white p-8">
+      {/* add the chartRef, the chart data to the canvas */}
       <canvas ref={chartRef} className="w-full" />
       {/* some conditional formatting to check time is readable */}
       <p className="border-b-2 my-4 border-green-800 text-lg inline-block text-l font-bold">
@@ -253,7 +254,7 @@ export default function RidechartRegression({
       </p>
       <p className="text-lg">This calcuation is based on you holding {pbLevel} for the duration of the ride. </p>
     </div>
-  ) : (
+  ) : ( // if not present spinner
     <p>
       {" "}
       <FontAwesomeIcon icon={faSpinner} spinPulse />

@@ -3,7 +3,7 @@ const RideDataSet = require("../models/RideDataSet");
 
 
 
-
+// exports datasets to frontend
 exports.dataSet = async (req, res) => {
   const marathon = await RunDataSet.find({ name: "marathon" });
   const half = await RunDataSet.find({ name: "half marathon" });

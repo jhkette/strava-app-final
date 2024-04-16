@@ -11,7 +11,7 @@ const activityLoop = require("../helpers/addActivityData");
 const calculateTss = require("../helpers/calculateTss");
 const checkPbs = require("../helpers/checksPbs");
 
-// key values for running and cycling
+// key values for running and cycling used throughout the server
 const { durations, distances } = require("../helpers/values");
 
 exports.getAthlete = async (req, res) => {
@@ -66,7 +66,6 @@ exports.getLatestActivities = async (req, res) => {
     }
   );
 
-  console.log("get latest", response.data);
   if (response.data.length == 0) {
     errors["error"] = "no activities found";
     return res.send(errors);
@@ -77,22 +76,16 @@ exports.getLatestActivities = async (req, res) => {
   const { id } = data_list[0].athlete;
   // equality check for latest actviity on mongo vs latest new activity
   const allActs = await UserActivities.findOne({ athlete_id: id });
-  console.log(
-    allActs.activities[allActs.activities.length - 1],
-    "the last activity"
-  );
 
-    //the last activities to check its not the latest one. 
-    if (
-      allActs.activities[allActs.activities.length - 1].id ==
-      data_list[data_list.length - 1].id 
-    ) {
-      errors["error"] = "this activity has already been added";
-      return res.send(errors);
-    }
-
-
-  
+  //the last activities to check its not the latest one.
+  if (
+    allActs.activities[allActs.activities.length - 1].id ==
+    data_list[data_list.length - 1].id
+  ) {
+    errors["error"] = "this activity has already been added";
+    return res.send(errors);
+  }
+   // get all extra data for each activities i.e watts, distance 'streams'
   const data_set = await activityLoop(data_list, token);
 
   /* checkPBs  = this is to check if there are new pbs - the helper function returns this destructured array */
@@ -104,7 +97,8 @@ exports.getLatestActivities = async (req, res) => {
     ftpChange,
   ] = checkPbs(data_set, allActs.cyclingpbs, allActs.runningpbs);
 
-  if (updateFlagCycling) { // if updatepb flag is true - update DB
+  if (updateFlagCycling) {
+    // if updatepb flag is true - update DB
     console.log(cyclingAllTime);
     await UserActivities.updateOne(
       { athlete_id: id },
@@ -116,8 +110,9 @@ exports.getLatestActivities = async (req, res) => {
     );
   }
 
-  if (updateFlagRunning) { // if updatepb flag is true - update DB
-    console.log(runAllTime);
+  if (updateFlagRunning) {
+    // if updatepb flag is true - update DB
+  
     await UserActivities.updateOne(
       { athlete_id: id },
       {
@@ -130,6 +125,7 @@ exports.getLatestActivities = async (req, res) => {
 
   if (ftpChange) {
     const amendedFTP = calcFtp(cyclingAllTime);
+    // update ftp if needed
     await UserActivities.updateOne(
       { athlete_id: id },
       {
@@ -156,11 +152,16 @@ exports.getLatestActivities = async (req, res) => {
     { $push: { activities: { $each: data_set } } }
   );
   return res.send(data_set);
-  // return res.json(data_set);
+
 };
+/**
+ * 
+ *  
+ *  
+ * 
+ */
 
 exports.importActivities = async (req, res) => {
-  console.log("import running")
   const errors = {};
   const token = await req.headers.authorization;
   const userId = req.headers.id;
@@ -168,8 +169,6 @@ exports.importActivities = async (req, res) => {
     errors["error"] = "Permission not granted";
     return res.send(errors);
   }
-  // // CHECK IF DATA EXISTS !!!!////
-
   // First I am checking if there is data for activities in mongodb
   const foundUserActs = await UserActivities.findOne({ athlete_id: userId });
   if (foundUserActs) {
@@ -179,8 +178,8 @@ exports.importActivities = async (req, res) => {
   }
 
   let page_num = 1;
-  const data_list = [];
-  try {
+  const data_list = []; // used to store activities
+  try { // get 200 activities through this loop
     while (page_num <= 8) {
       if (page_num % 2 === 0) {
         // await sleep();
@@ -193,16 +192,17 @@ exports.importActivities = async (req, res) => {
         }
       );
 
-      data_list.push(...response.data);
+      data_list.push(...response.data); // push data to array
       page_num++;
     }
   } catch (err) {
     console.log(err.message);
   }
-
+  // get all the extra data for each activity
   const data_set = await activityLoop(data_list, token);
   const allTime = {};
   const runAllTime = {};
+  // seperate out runs and bike rides
   const bikeActivities = data_set.filter((element) =>
     element.hasOwnProperty("pbs")
   );
@@ -210,29 +210,27 @@ exports.importActivities = async (req, res) => {
   const runActivities = data_set.filter((element) =>
     element.hasOwnProperty("runpbs")
   );
-
+  // loop through each bike activity to find the max power for each duration
   for (duration of durations) {
     let result = bikeActivities.map((activity) => activity.pbs[duration]);
     allTime[duration] = _.max(result);
-
-
   }
-
+  // loop through runs to find shortest time for each distance
   for (distance of distances) {
     let result = runActivities.map((activity) => activity.runpbs[distance]);
     runAllTime[distance] = _.min(result);
   }
-
+  // calculate FTP
   const ftp = calcFtp(allTime);
-
+  // calc maxHR for cycling
   const maxCyclingHr = calcMaxHr(bikeActivities, "ride");
-
+    // calc maxHR for running
   const runMaxHr = calcMaxHr(runActivities, "run");
-
+   // calc  hrzones
   const bikeZones = getHrZones(maxCyclingHr);
-
+   // calc hrzones
   const runZones = getHrZones(runMaxHr);
-
+  // calculate TSS for each activity
   for (element of data_set) {
     const finalTss = calculateTss(element, ftp, bikeZones, runZones);
     element["tss"] = finalTss;
@@ -309,7 +307,7 @@ exports.importActivities = async (req, res) => {
   );
   console.log(userId);
   // the user is not going to need the data
-  // the client will have logged them out to wait to for the import function to run. 
+  // the client will have logged them out to wait to for the import function to run.
   // next time they log in the data will be retrieved from the athlete route
-  return res.send(' Succesful import');
+  return res.send(" Succesful import");
 };
