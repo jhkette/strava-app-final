@@ -1,0 +1,33 @@
+/* TSS formula*/
+TSS = (sec x NP® x IF®)/(FTP x 3600) x 100
+
+/* normalised power formula */
+1.Determine the 30-second rolling average power for the data segment (whole ride or race, specific climb, interval session, etc.).
+2.Raise all these values to the 4th power (i.e. x4). This is how those higher power efforts are emphasized. Thirty seconds at 5 watts goes to 625 watts but 30 seconds at 300 watts goes to 8.1 billion watts!
+3.Calculate the average of raised values.
+4.Take the 4th root of that value. This brings the numbers back to reality
+
+
+/*sliding window average - here the window is 2.*/
+const arr = [1, 2, 3, 4, 5];
+const num = 2;
+const findContiniousAverage = (arr = [], num = 1) => {
+   if(num > arr.length){
+      return [];
+   };
+   const res = [];
+   let sum = 0;
+   let left = 0, right = 0;
+   for(; right < num; right++){
+      sum += arr[right];
+   };
+   res.push(sum / num);
+   for(; right < arr.length; right++, left++){
+      sum -= arr[left];
+      sum += arr[right];
+      res.push(sum / num);
+   };
+   return res;
+};
+console.log(findContiniousAverage(arr, num));
+console.log(findContiniousAverage(arr));

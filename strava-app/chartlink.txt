@@ -1,0 +1,17 @@
+  // https://code.tutsplus.com/getting-started-with-chartjs-scales--cms-28477t
+  // https://stackoverflow.com/questions/48081521/line-chart-with-x-y-point-data-displays-only-2-values
+  // https://jsfiddle.net/1sxrtcw5/1/
+  //https://stackoverflow.com/questions/37204298/how-can-i-hide-dataset-labels-in-chart-js-v2
+
+  // https://www.youtube.com/watch?v=p3WQQkuEJ3M - floating labels
+
+
+  // https://www.chartjs.org/docs/latest/samples/tooltip/content.html // TOOLTIP USEFUL AND IMPORTANT
+
+
+  // https://www.youtube.com/watch?v=W81cRus9QEU doughnut with needle
+  // https://inscyd.com/article/vo2max-charts-by-age-gender-sport/ v02 max chart
+
+
+  // REACT CONTEXT GUIDE
+https://www.google.com/search?q=auth+context+guide&rlz=1C5CHFA_enGB990GB990&oq=auth+context+guide&gs_lcrp=EgZjaHJvbWUyBggAEEUYOdIBCDQ2MDBqMGo5qAIAsAIA&sourceid=chrome&ie=UTF-8#fpstate=ive&vld=cid:3ef07206,vid:2-6K-TMA-nw,st:0

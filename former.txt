@@ -1,0 +1,45 @@
+ // for (element of data_set) {
+    //   if (element["type"] == "Ride" || element["type"] == "VirtualRide") {
+    //     try {
+    //       let watts = await axios.get(
+    //         // https://communityhub.strava.com/t5/developer-discussions/strava-api-keys-and-streams/m-p/5393
+    //         `https://www.strava.com/api/v3/activities/${element.id}/streams/watts?series_type=time&resolution=medium`,
+    //         { headers: { Authorization: `${token}` } }
+    //       );
+    //       if (watts.status == 429) {
+    //         await sleep();
+    //         watts = await axios.get(
+    //           // https://communityhub.strava.com/t5/developer-discussions/strava-api-keys-and-streams/m-p/5393
+    //           `https://www.strava.com/api/v3/activities/${element.id}/streams/watts?series_type=time&resolution=medium`,
+    //           { headers: { Authorization: `${token}` } }
+    //         );
+    //       }
+
+    //       if (watts.data.length >= 2) {
+    //         element["watt_stream"] = watts.data;
+    //         // const sorted = quickSort(findAverage(element["watt_stream"][0].data))
+    //         // console.log(sorted)
+    //       }
+    //     } catch (err) {
+    //       res.status(400).send({ error: err });
+    //     }
+    //   }
+    //   if (element["type"] == "Run") {
+    //     try {
+    //       let run = await axios.get(
+    //         `https://www.strava.com/api/v3/activities/${element.id}/streams?keys=time,heartrate,velocity_smooth&key_by_type=true&resolution=medium`,
+    //         { headers: { Authorization: `${token}` } }
+    //       );
+    //       if (run.status == 429) {
+    //         await sleep();
+    //         run = await axios.get(
+    //           `https://www.strava.com/api/v3/activities/${element.id}/streams?keys=time,heartrate,velocity_smooth&key_by_type=true&resolution=medium`,
+    //           { headers: { Authorization: `${token}` } }
+    //         );
+    //       }
+    //       element["run_stream"] = run.data;
+    //     } catch (err) {
+    //       res.status(400).send({ error: err });
+    //     }
+    //   }
+    // }
