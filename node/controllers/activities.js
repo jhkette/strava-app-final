@@ -5,7 +5,6 @@ const _ = require("lodash");
 const UserActivities = require("../models/UserActivities");
 // helper functions
 const { calcMaxHr, getHrZones } = require("../helpers/hrCalculation");
-const { sleep } = require("../helpers/sleep");
 const { calcFtp } = require("../helpers/ftpCalculation");
 const activityLoop = require("../helpers/addActivityData");
 const calculateTss = require("../helpers/calculateTss");
@@ -49,9 +48,6 @@ exports.getLatestActivities = async (req, res) => {
   // we need t
   const errors = {};
   const after = parseInt(req.params.after);
-  console.log("after", after);
-
-  console.log(req.headers.authorization);
   const token = req.headers.authorization;
   if (!token) {
     errors["error"] = "Permission not granted";
@@ -156,9 +152,11 @@ exports.getLatestActivities = async (req, res) => {
 };
 /**
  * 
- *  
- *  
- * 
+ *  Bulk Imports all activities (200)
+ *  loops through and adds running/cycling pbs
+ *  maxhr, tss for each activiy
+ * This will take up to an hour because 
+ * of strava rate limit
  */
 
 exports.importActivities = async (req, res) => {
@@ -301,11 +299,9 @@ exports.importActivities = async (req, res) => {
       },
     },
 
-    // `allUserData` is the document _after_ `update` was applied because of
-    // `new: true`
-    { new: true }
+  
   );
-  console.log(userId);
+
   // the user is not going to need the data
   // the client will have logged them out to wait to for the import function to run.
   // next time they log in the data will be retrieved from the athlete route
