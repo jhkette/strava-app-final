@@ -10,7 +10,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 
-
+// calender component
 export default function EventsCalender({ userActivities }) {
   const currentDate = new Date(); // get current date
 

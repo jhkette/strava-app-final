@@ -3,7 +3,7 @@ import LineChart from "./components/LineChart";
 import DoughnutChart from "./components/Doughnut";
 import RidechartRegression from "./components/RideChartRegression";
 import Ftp from "./components/Ftp";
-
+// cycling page
 export default function Cycling({
   userRecords,
   alpedataset,

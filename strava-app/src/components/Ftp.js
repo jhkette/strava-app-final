@@ -41,7 +41,7 @@ export default function DoughnutChart({ ftp }) {
   };
 
 
-
+  // returns zones table
   return (
     <div className="bg-white p-4">
     <table class="border-collapse table-fixed w-full text-sm ">

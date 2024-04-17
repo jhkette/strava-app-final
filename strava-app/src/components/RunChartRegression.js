@@ -11,7 +11,7 @@ import { faSpinner } from "@fortawesome/free-solid-svg-icons";
  * 
  * This returns a regression chart runs
  * the actual graph is constrcuted in the useffect function
- * I have had to create several that the relevant data is present
+ * I have had to create several checks that the relevant data is present
  * then I construct the chart - it gets passed as a parameter to the canvas 
  * 
  */
@@ -165,7 +165,7 @@ export default function RunchartRegression({ userRecords, event, regdata }) {
     return intervalToDuration({ start: 0, end: time * 1000 });
   }
 
-  
+   // gets pacing for event
   function getPace(time, event){
   
     let pace, pace2, finalpace1, finalpace2 // initialise variable
@@ -192,7 +192,7 @@ export default function RunchartRegression({ userRecords, event, regdata }) {
     predFormat = humanDuration(prediction);
     fivekFormat = humanDuration(userRecords.runningpbs["5000"]);
     recPace = getPace(prediction, event)
-    console.log(recPace)
+ 
   }
 
   return userRecords.runningpbs ? (

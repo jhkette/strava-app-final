@@ -36,9 +36,14 @@ ChartJS.register(
   Legend
 );
 
+/**
+ * 
+ * 
+ * Creates line chart for cycling power graph 
+ */
 export default function LineChart(props) {
 
-  if(!props.power.cyclingpbs){
+  if(!props.power.cyclingpbs){ // if no data show spinner
     return(
       <FontAwesomeIcon icon={faSpinner} spinPulse />
     )
