@@ -8,7 +8,13 @@ I have gitignored all node_modules (i.e dependencies). In past experience my com
 to upload what would be 1000s of files so I have left them. To run and install the app locally please
 follow the instructions below
 
-## Instructions for node-react strava app
+## The Live site
+
+[http://159.65.83.17/](http://159.65.83.17/).
+
+Please use the test Strava account I have given at the top of the report for authentication. 
+
+## Instructions for local node-react strava app
 
 Run git clone or download a zip file of the code. Then from the command line cd into the root of the entire project.
 To then start the node server you need to run:
