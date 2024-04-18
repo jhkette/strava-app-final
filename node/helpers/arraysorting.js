@@ -27,8 +27,10 @@ function findMaxSubArray( k, nums){
 }
 
 /**
- * quicksort function  sorts a list using
- * quick sort algorithm
+ * quicksort function  sorts a list
+ * this function is from
+ * Colt Steele JavaScript Algorithms and Data Structures Masterclass video series on 
+ * udemy 
  * @param items[]
  * @returns []
  */
