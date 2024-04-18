@@ -8,6 +8,8 @@ I have gitignored all node_modules (i.e dependencies). In past experience my com
 to upload what would be 1000s of files so I have left them. To run and install the app locally please
 follow the instructions below
 
+The .env file is in the node folder - I chose to leave it in so code could be run locally if needed.
+
 ## The Live site
 
 [http://159.65.83.17/](http://159.65.83.17/).
