@@ -2,7 +2,7 @@
 const axios = require("axios");
 const _ = require("lodash");
 // helper functions
-const { findAverages } = require("./arraysorting");
+const { findMaxSubArray} = require("./arraysorting");
 const { runDistance, getShortestSubarray } = require("./runSorting");
 const { durations, distances } = require("./values");
 const { sleep } = require("../helpers/sleep");
@@ -18,12 +18,13 @@ const { checkForTimeError } = require("./timeErrorCheck");
  *  @returns data_set []
  */
 async function activityLoop(data_set, token) {
-  let calls = 10; // we have already made 10 calls
+  let calls = 10; // we have already made at least 8 calls - err on side of safety
   for (element of data_set) {
     if (calls === 90) {
       await sleep();
       calls = 0;
     }
+    // ride block
     if (element["type"] == "Ride" || element["type"] == "VirtualRide") {
       if (element["device_watts"]) {
         let watts = await axios.get(
@@ -34,19 +35,20 @@ async function activityLoop(data_set, token) {
         if (watts["data"]["watts"]) {
           element["watt_stream"] = watts.data;
           const pbs = {};
-        
+          // checking there is time data for each second - some recording devices don't
+          // if they don't i just return an empty pb array object as it interferes with accurate data
           const times = element["watt_stream"]["time"]["data"];
           const shouldBeFive = checkForTimeError(times);
           if (shouldBeFive === 5) {
             if (element["watt_stream"]["watts"]) {
+              // this block gets power pbs
               for (duration of durations) {
-                const averages = findAverages(
+                const maxAverage = findMaxSubArray(
                   duration,
                   element["watt_stream"]["watts"]["data"]
                 );
-                if (averages) {
-                  const sorted = _.max(averages);
-                  pbs[duration] = Math.round(sorted);
+                if (maxAverage) {
+                  pbs[duration] = maxAverage;
                 }
               }
             }
@@ -56,8 +58,10 @@ async function activityLoop(data_set, token) {
         }
       }
     }
+    // run block
     if (element["type"] == "Run") {
       if (element["has_heartrate"]) {
+        // this block gets run pbs
         let run = await axios.get(
           `https://www.strava.com/api/v3/activities/${element.id}/streams?keys=time,heartrate,velocity_smooth&key_by_type=true&resolution=high`,
           { headers: { Authorization: token } }
@@ -65,23 +69,24 @@ async function activityLoop(data_set, token) {
         calls++;
         element["run_stream"] = run.data;
         const runpbs = {};
-        // console.log(element["watt_stream"])
-        // checking there is time data for each second - some recording devices don't
-        // if they don't i just return an empty pb array object as it interferes with accurate data. 
-        const times = element["run_stream"]["time"]["data"]
-        const shouldBeFive = checkForTimeError(times)
-      
-        if(shouldBeFive === 5){
-        const runInMetres = runDistance(
-          element["run_stream"]["distance"]["data"]
-        );
 
-        for (distance of distances) {
-          const quickest = getShortestSubarray(runInMetres, distance);
-          // console.log(quickest)
-          runpbs[distance] = quickest;
+        // checking there is time data for each second - some recording devices don't
+        // if they don't i just return an empty pb array object as it interferes with accurate data.
+        const times = element["run_stream"]["time"]["data"];
+        const shouldBeFive = checkForTimeError(times);
+
+        if (shouldBeFive === 5) {
+          const runInMetres = runDistance(
+            element["run_stream"]["distance"]["data"]
+          );
+
+          for (distance of distances) {
+            // gets quickest times
+            const quickest = getShortestSubarray(runInMetres, distance);
+
+            runpbs[distance] = quickest;
+          }
         }
-      }
         element["runpbs"] = runpbs;
       }
     }

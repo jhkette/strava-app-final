@@ -1,31 +1,29 @@
 const _ = require("lodash");
 /**
- * https://sunjetliu.medium.com/algorithm-practice-find-averages-of-subarrays-db9108c0d55e
- * Function findAverages
- * @param n - Integer length for average
- * @param array  -[] array of watts values
- * @returns averages []
+ * 
+ * @Function findMaxSubArray
+ * @param k - Integer length for subarray
+ * @param nums  -[] array of watts values
+ * @returns maxSum int
  */
 
-function findAverages(n, array) {
-  // if n is bigger than arrayay length return null
-  if (n > array.length) {
-    return null;
+function findMaxSubArray( k, nums){
+
+  let maxSum = 0; // initialise maxsum
+  let tempSum = 0; // initialise temp value
+  if (!nums.length) return null; // handle edge cases
+  if(nums.length < k) return null;
+  for(let i = 0; i < k; i++){ // loop up to k to get first max sum value
+      maxSum += nums[i]
   }
-  // store average in arrayay
-  const averages = [];
-  let windowSum = 0.0, // initalise windowSum and windowStart values
-    windowStart = 0;
-  for (let windowEnd = 0; windowEnd < array.length; windowEnd++) { // start loop
-    windowSum += array[windowEnd]; // add the next element
-    if (windowEnd >= n - 1) { // if windowend = n-1 ie the length we are looking for
-      averages.push(windowSum / n); // add the average to results
-      // we subtract from the sum the first item in the window - as the window is moving one up
-      windowSum -= array[windowStart]; 
-      windowStart += 1; // move window start up one
-    }
+  tempSum = maxSum;
+  for (let i = k; i < nums.length; i++ ){ // loop though nums length from k
+      // tempsum - subtract the last value of prior window and the new value to front of window
+      tempSum = tempSum - nums[i - k] + nums[i]; 
+      // maxSum 
+      maxSum = Math.max(maxSum, tempSum) // check if value is bigger than prior maxSum
   }
-  return averages; // return the array of averages
+  return Math.round(maxSum/k); // then we divide by k to get the actual average (power)
 }
 
 /**
@@ -61,4 +59,4 @@ function quickSort(items) {
   return [...quickSort(leftItems), pivot, ...quickSort(rightItems)];
 }
 
-module.exports = { findAverages, quickSort };
+module.exports = { findMaxSubArray, quickSort };

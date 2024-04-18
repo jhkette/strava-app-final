@@ -13,8 +13,14 @@ const checkPbs = require("../helpers/checksPbs");
 // key values for running and cycling used throughout the server
 const { durations, distances } = require("../helpers/values");
 
+/**
+ * Get key info about individual
+ * athlete from strava (ie name, etc)
+ * Then this is used to get user id for stored data
+ * on user in mongoDB. This returns all stored data,
+ * this is called when the user first logs in
+ */
 exports.getAthlete = async (req, res) => {
-  console.log("get athlete ran", req.headers.authorization);
   const errors = {};
   const token = req.headers.authorization;
   if (!token) {
@@ -178,7 +184,7 @@ exports.importActivities = async (req, res) => {
   let page_num = 1;
   const data_list = []; // used to store activities
   try { // get 200 activities through this loop
-    while (page_num <= 8) {
+    while (page_num <= 5) {
       if (page_num % 2 === 0) {
         // await sleep();
       }
@@ -186,7 +192,7 @@ exports.importActivities = async (req, res) => {
         `https://www.strava.com/api/v3/athlete/activities`,
         {
           headers: { Authorization: token },
-          params: { per_page: 25, page: page_num },
+          params: { per_page: 8, page: page_num },
         }
       );
 

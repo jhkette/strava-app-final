@@ -146,7 +146,7 @@ function App() {
   const importData = async () => {
     const token = Cookies.get("token");
     setMessage(
-      "Please come back and login after an hour - the data will be uploaded by then"
+      "Please come back and login after an hour"
     );
     const config = {
       headers: { Authorization: `Bearer ${token}`, id: athlete.id },
@@ -195,7 +195,9 @@ function App() {
       <div className="h-auto w-full ">
         {!!athlete.id && (
           <header className="pt-4 px-24 w-full flex justify-end ">
+            {message && <h3>{message}</h3>}
             {faSquareArrowUpRight && <ReturnProfile athlete={athlete} />}
+            
           </header>
         )}
 

@@ -1,5 +1,7 @@
 /**
  * This reduces the times array to the distance between the times
+ * it should be five - i'm trying to check the time array
+ * is measure every second
  * @function checkForTimeError 
  * @param times []
  * @returns int 

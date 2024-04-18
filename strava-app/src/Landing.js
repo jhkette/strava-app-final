@@ -39,11 +39,7 @@ export default function Landing({ userActivities, link, message }) {
       {!!userActivities.length && (
         <main className="min-h-screen">
           <div className="px-24 py-16">
-          {!!message && (
-        <div className="border border-dashed flex flex-col  opacity-70 rounded-md bg-blue-100 justify-between border-gray-600 p-2 min-h-[250px]">
-          <p className="font-extrabold"> {message}</p>
-        </div>
-      )}
+       
         
             <EventCalendar userActivities={userActivities} />
           </div>

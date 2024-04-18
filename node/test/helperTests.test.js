@@ -1,32 +1,32 @@
 const _ = require("lodash");
-const { findAverages, quickSort } = require("../helpers/arraysorting");
+const { findMaxSubArray, quickSort } = require("../helpers/arraysorting");
 const { getShortestSubarray, runDistance } = require("../helpers/runSorting");
 const checkPbs = require("../helpers/checksPbs");
 const calculateTss = require("../helpers/calculateTss");
 const { durations } = require("../helpers/values");
 
 /**
- * Testing findAverages  function
+ * Testing  findMaxSubArray  function
  * */
-describe("Testing findAverages to detect average power for a time duration", function () {
+describe("Testing  findMaxSubArray to detect average power for a time duration", function () {
   it("returns the correct array of averages", function () {
-    const powerNums = findAverages(2, [2, 2, 2, 2, 4, 2]);
-    expect(powerNums).toStrictEqual([2, 2, 2, 3, 3]);
+    const powerNums = findMaxSubArray(2, [2, 2, 2, 2, 4, 2]);
+    expect(powerNums).toBe(3);
   });
 
   it("finds the corrects average", function () {
-    const powerNums = findAverages(2, [2, 2, 2, 2, 4, 2]);
-    const maxNum = _.max(powerNums);
-    expect(maxNum).toBe(3);
+    const powerNums = findMaxSubArray(2, [2, 2, 2, 2, 6, 2]);
+    
+    expect(powerNums).toBe(4);
   });
 
   it("finds the corrects average", function () {
-    const powerNums = findAverages(
+    const powerNums = findMaxSubArray(
       2,
       [2, 2, 2, 2, 4, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 10, 20]
     );
-    const maxNum = _.max(powerNums);
-    expect(maxNum).toBe(15);
+    
+    expect(powerNums).toBe(15);
   });
 });
 
