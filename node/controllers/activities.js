@@ -50,6 +50,13 @@ exports.getAthlete = async (req, res) => {
   }
 };
 
+/**
+ * Get the latest activities from Stava
+ * this data is also filter to get pbs, cyclingpbs training stress
+ *  and so on. I then run a checkPbs function to see if pbs have improved
+ * This is called by the client when they login - so client updates
+ * automatically
+**/
 exports.getLatestActivities = async (req, res) => {
   // we need t
   const errors = {};
@@ -162,7 +169,7 @@ exports.getLatestActivities = async (req, res) => {
  *  loops through and adds running/cycling pbs
  *  maxhr, tss for each activiy
  * This will take up to an hour because 
- * of strava rate limit
+ * of strava rate limit - so sleep function is called every 98 calls
  */
 
 exports.importActivities = async (req, res) => {
