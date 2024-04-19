@@ -192,9 +192,7 @@ exports.importActivities = async (req, res) => {
   const data_list = []; // used to store activities
   try { // get 200 activities through this loop
     while (page_num <= 5) {
-      if (page_num % 2 === 0) {
-        // await sleep();
-      }
+    
       let response = await axios.get(
         `https://www.strava.com/api/v3/athlete/activities`,
         {
