@@ -16,7 +16,7 @@ describe("Testing  findMaxSubArray to detect average power for a time duration",
 
   it("finds the corrects average", function () {
     const powerNums = findMaxSubArray(2, [2, 2, 2, 2, 6, 2]);
-    
+
     expect(powerNums).toBe(4);
   });
 
@@ -25,7 +25,7 @@ describe("Testing  findMaxSubArray to detect average power for a time duration",
       2,
       [2, 2, 2, 2, 4, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 10, 20]
     );
-    
+
     expect(powerNums).toBe(15);
   });
 });
@@ -104,9 +104,25 @@ describe("Testing the TSS function", function () {
     const activity = {
       moving_time: 3600,
       weighted_average_watts: 200,
+      has_heartrate: false,
+      average_heartrate: 114.4,
     };
     const tss = calculateTss(activity, 200);
 
     expect(tss).toBe(100);
+  });
+});
+
+describe("Testing the TSS function", function () {
+  it("it returns the correct number for TSS - ", function () {
+    const activity = {
+      moving_time: 3600,
+      weighted_average_watts: null,
+      has_heartrate: false,
+      average_heartrate: null,
+    };
+    const tss = calculateTss(activity, 200);
+
+    expect(tss).toBe(0);
   });
 });

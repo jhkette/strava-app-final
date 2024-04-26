@@ -30,7 +30,7 @@ function calculateTss(activity, ftp, bikeHrZones, runZones) {
     return Math.round(tss);
   }
   let zones;
-  if (!activity["average_heartrate"]) {
+  if (!activity["average_heartrate"] && !activity["weighted_average_watts"]) {
     return 0
   }
   else {
