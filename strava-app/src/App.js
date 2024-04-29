@@ -3,7 +3,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import _ from "lodash";
 import { faSquareArrowUpRight } from "@fortawesome/free-solid-svg-icons";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Link } from "react-router-dom";
 // context
 import { useAuth } from "./context/AuthContext";
 // components
@@ -14,6 +14,8 @@ import Cycling from "./Cycling";
 import Running from "./Running";
 import ProtectedRoute from "./protectRoute";
 
+import powered from "./images/powered.png"
+
 
 
 function App() {
@@ -21,6 +23,7 @@ function App() {
 
   // const [auth, setAuth] = useState(false);
   const [athlete, setAthlete] = useState({});
+
   const [latest, setLatest] = useState(null);
   const [userActivities, setUseractivities] = useState([]);
   const [userRecords, setUserRecords] = useState({});
@@ -73,7 +76,7 @@ function App() {
         }
         // set the state values with response
         setAthlete(userData.data.profile);
-
+   
         const userRecordsInfo = _.omit(userData.data.user, "activities");
         setUserRecords(userRecordsInfo);
         setUseractivities(userData.data.user.activities);
@@ -185,7 +188,8 @@ function App() {
   }
 
   return (
-    <div className="font-body flex ">
+    <div className="font-body flex">
+     
       <Sidebar
         logout={logout}
     
@@ -195,8 +199,13 @@ function App() {
       <div className="h-auto w-full ">
         {!!athlete.id && (
           <header className="pt-4 px-24 w-full flex justify-end ">
+               
             {message && <h3>{message}</h3>}
-            {faSquareArrowUpRight && <ReturnProfile athlete={athlete} />}
+            {faSquareArrowUpRight && <div>
+            
+              <ReturnProfile athlete={athlete} /> </div>
+            
+            }
             
           </header>
         )}
@@ -248,8 +257,15 @@ function App() {
             ></Route>
             </Route>
           </Routes>
+          <footer className="flex px-24 justify-end">
+         {athlete.id && <a href={`https://www.strava.com/athletes/${athlete.id}`}target="_blank" rel="noreferrer"> View your profile on Strava </a>}
+      <img src={powered} alt="Logo"  className="h-12"/> 
+      
+      </footer>
         </div>
       </div>
+     
+      
     </div>
   );
 }

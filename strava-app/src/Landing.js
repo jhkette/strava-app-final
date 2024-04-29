@@ -1,6 +1,7 @@
 import React from "react";
 import EventCalendar from "./components/Calender";
 import { useAuth } from "./context/AuthContext";
+import logo from './images/strava.png'
 //  landing page with activity calender
 
 
@@ -25,12 +26,12 @@ export default function Landing({ userActivities, link, message }) {
                 have a weight attached to your profile. It is under Settings{" "}
                 {">"} My Profile in strava.
               </p>
-
-              <button className="bg-sky-800 px-6 py-2 rounded-lg  text-xl hover:bg-green-600 hover:text-slate-900 transition ease-in-out">
-                <a href={!!link && link} className="text-white">
-                  Authorise Strava
-                </a>
-              </button>
+              <div className="">
+              <a href={!!link && link} className="text-white ">
+              <img src={logo} alt="Logo"  className="h-16"/>;
+              </a>
+              </div>
+              
             </div>
           </div>
         </main>
