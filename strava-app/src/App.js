@@ -3,7 +3,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import _ from "lodash";
 import { faSquareArrowUpRight } from "@fortawesome/free-solid-svg-icons";
-import { Routes, Route, Link } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 // context
 import { useAuth } from "./context/AuthContext";
 // components

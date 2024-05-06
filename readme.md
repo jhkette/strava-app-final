@@ -1,5 +1,8 @@
 # Node/React Strava API application
 
+
+![Screenshot 1](./images/screen1.jpg)
+
 ## Description of folders
 The strava-app is the front end of the applications made in React. The node folder is the server
 made using node/express. The cypress folder just contains end to end testing files.
