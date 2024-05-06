@@ -14,9 +14,8 @@ import Cycling from "./Cycling";
 import Running from "./Running";
 import ProtectedRoute from "./protectRoute";
 
-import powered from "./images/powered.png"
 
-
+import powered from "./images/powered.png";
 
 function App() {
   const [link, setLink] = useState();
@@ -32,14 +31,13 @@ function App() {
   const [alpe, setAlpe] = useState({});
 
   const [message, setMessage] = useState("");
-  const [hardknott, setHardknott] = useState({})
-  const [scotland, setScotland] = useState({})
+  const [hardknott, setHardknott] = useState({});
+  const [scotland, setScotland] = useState({});
 
   const baseURL = "http://localhost:3000/api";
-   
 
   // impprt react context auth - this gives access to global auth state
-  const { auth, setAuth } = useAuth();
+  const {auth, setAuth } = useAuth();
 
   /*
    * Useffect function runs when page loads,
@@ -76,7 +74,7 @@ function App() {
         }
         // set the state values with response
         setAthlete(userData.data.profile);
-   
+
         const userRecordsInfo = _.omit(userData.data.user, "activities");
         setUserRecords(userRecordsInfo);
         setUseractivities(userData.data.user.activities);
@@ -88,9 +86,9 @@ function App() {
         setMarathon(dataSet.data.marathon);
         setHalf(dataSet.data.half);
         setAlpe(dataSet.data.alpe);
-   
-        setHardknott(dataSet.data.hardknott)
-        setScotland(dataSet.data.scotland)
+
+        setHardknott(dataSet.data.hardknott);
+        setScotland(dataSet.data.scotland);
       } catch (error) {
         console.log(error);
       }
@@ -148,9 +146,7 @@ function App() {
    */
   const importData = async () => {
     const token = Cookies.get("token");
-    setMessage(
-      "Please come back and login after an hour"
-    );
+    setMessage("Please come back and login after an hour");
     const config = {
       headers: { Authorization: `Bearer ${token}`, id: athlete.id },
     };
@@ -189,24 +185,20 @@ function App() {
 
   return (
     <div className="font-body flex">
-     
       <Sidebar
         logout={logout}
-    
         importData={importData}
         userActivities={userActivities}
       />
       <div className="h-auto w-full ">
         {!!athlete.id && (
           <header className="pt-4 px-24 w-full flex justify-end ">
-               
             {message && <h3>{message}</h3>}
-            {faSquareArrowUpRight && <div>
-            
-              <ReturnProfile athlete={athlete} /> </div>
-            
-            }
-            
+            {faSquareArrowUpRight && (
+              <div>
+                <ReturnProfile athlete={athlete} />{" "}
+              </div>
+            )}
           </header>
         )}
 
@@ -239,33 +231,46 @@ function App() {
                     alpedataset={alpe}
                     scotland={scotland}
                     weight={weight}
-                   hardknott={hardknott}
+                    hardknott={hardknott}
                   />
                 }
               ></Route>
             </Route>
             <Route exact path="/running" element={<ProtectedRoute />}>
-            <Route
-              exact path="/running"
-              element={
-                <Running
-                  userRecords={userRecords}
-                  mardataset={marathon}
-                  halfdataset={half}
-                />
-              }
-            ></Route>
+              <Route
+                exact
+                path="/running"
+                element={
+                  <Running
+                    userRecords={userRecords}
+                    mardataset={marathon}
+                    halfdataset={half}
+                  />
+                }
+              ></Route>
             </Route>
           </Routes>
-          <footer className="flex px-24 justify-end">
-         {athlete.id && <a href={`https://www.strava.com/athletes/${athlete.id}`}target="_blank" rel="noreferrer"> View your profile on Strava </a>}
-      <img src={powered} alt="Logo"  className="h-12"/> 
-      
-      </footer>
+          <footer className="flex   px-24 justify-end align-center">
+            {auth && <div className="w-72 flex flex-col justify-end items-end">
+             
+              <img src={powered} alt="Logo" className="h-12 w-72" />
+              <p className="text-orange-800 mr-4 pb-4">
+                {" "}
+                {athlete.id && (
+                  <a
+                    href={`https://www.strava.com/athletes/${athlete.id}`}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    {" "}
+                    View your profile on Strava{" "}
+                  </a>
+                )}
+              </p>
+            </div> }
+          </footer>
         </div>
       </div>
-     
-      
     </div>
   );
 }

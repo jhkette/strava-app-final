@@ -20,8 +20,8 @@ export default function Sidebar({
   const { auth } = useAuth();
   return (
     <div className="h-auto w-4/12 bg-slate-200 min-h-screen drop-shadow-2xl">
-      <nav className="flex flex-col p-12 ml-8">
-        <div className="flex flex-row justify-start items-center py-2  border-black/20">
+      <nav className="flex flex-col p-16 ml-8">
+        <div className="flex flex-row justify-start items-center py-2 border-b border-black/10">
           <div className="w-10">
             <FontAwesomeIcon icon={faCalendar} size="xl" />
           </div>
@@ -30,7 +30,7 @@ export default function Sidebar({
           </p>
         </div>
         {!!userActivities.length && (
-          <div className="flex flex-row justify-start items-center py-2  border-black/20">
+          <div className="flex flex-row justify-start items-center py-2 border-b border-black/10">
             <div className="w-10">
               <FontAwesomeIcon icon={faBiking} size="xl" />
             </div>
@@ -40,7 +40,7 @@ export default function Sidebar({
           </div>
         )}
         {!!userActivities.length && (
-          <div className="flex flex-row justify-start items-center py-2  border-black/20">
+          <div className="flex flex-row justify-start items-center py-2 border-b border-black/10">
             <div className="w-10">
               <FontAwesomeIcon icon={faRunning} size="xl" />
             </div>
@@ -51,7 +51,7 @@ export default function Sidebar({
         )}
 
         {auth && (
-          <div className="flex flex-row justify-start items-center py-2  border-black/20">
+          <div className="flex flex-row justify-start items-center py-2 border-b  border-black/10">
             <div className="w-10">
               <FontAwesomeIcon icon={faDoorOpen} size="xl" />
             </div>

@@ -42,18 +42,21 @@ export default function EventsCalender({ userActivities }) {
     let formattedDate = format(date, "E LLL dd yyyy");
     let dateFound = allDates.find((obj) => obj.date === formattedDate);
     if (dateFound) {
-     
+     const watts = activity["average_watts"]  ? activity["average_watts"] : null
       if (activity["average_heartrate"]) { // for all actvities with heart rate
+      
         dateFound.events.push([
           activity.sport_type,
           activity.average_heartrate,
           activity.tss,
+          {"watts":watts}
         ]);
         dateFound.tss += activity.tss;
       } else if(activity["average_watts"]){ // if power meter but no heart rate
         dateFound.events.push([
           activity.sport_type,
           activity.tss,
+          {"watts":watts}
         ])
       } 
       
@@ -92,8 +95,10 @@ export default function EventsCalender({ userActivities }) {
             {(eventArr[0] === "WeightTraining") &&   <FontAwesomeIcon icon={faDumbbell} size="sm" className="pr-2" />} 
             {(!sports.includes(eventArr[0])) && <FontAwesomeIcon icon={faHeart} size="sm" className="pr-2" />}
             {eventArr[0]}</p>
-            <p>Average heartrate:{eventArr[1]}</p>
-            <p className="pb-2">TSS:{eventArr[2]}</p>{" "}
+            <p>Average heartrate: {eventArr[1]}</p>
+            {eventArr[2].watts ? <p>Average watts: {eventArr[3].watts}</p> : ""}
+            {eventArr[3].watts ? <p>Average watts: {eventArr[3].watts}</p> : ""}
+            <p className="pb-2">TSS: {eventArr[2]}</p>{" "}
           </div>
         );
       });
@@ -104,7 +109,7 @@ export default function EventsCalender({ userActivities }) {
           <div className="py-2">
             <p className="font-semibold">{date.date}</p>
             <p>{eventText}</p>  
-            <p className="font-semibold">Total Training stress:{date.tss}</p>
+            <p className="font-semibold">Total Training stress: {date.tss}</p>
           </div>
           <div className={classes}></div>
         </div>
