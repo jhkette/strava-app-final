@@ -19,12 +19,6 @@ This application takes data from the Strava API to analyse a user's data. The ap
 The strava-app is the front end of the applications made in React. The node folder is the server
 made using node/express. The cypress folder just contains end to end testing files.
 
-I have gitignored all node_modules (i.e dependencies). In past experience my computer has struggled
-to upload what would be 1000s of files so I have left them. To run and install the app locally please
-follow the instructions below
-
-The .env file is in the node folder - I chose to leave it in so code could be run locally if needed.
-
 ## The Live site
 
 [http://159.65.83.17/](http://159.65.83.17/).
