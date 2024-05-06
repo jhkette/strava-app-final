@@ -4,12 +4,16 @@ This application takes data from the Strava API to analyse a user's data. The ap
 
 
 ![Screenshot 1](./images/screen1.jpg)
+*Hill climb predicted time using polynomial regression.*
 
 ![Screenshot 2](./images/screen2.jpg)
+*An athlete's power curve*
 
 ![Screenshot 3](./images/screen3.jpg)
+*An athlete's pace graph*
 
 ![Screenshot 3](./images/screen3.jpg)
+*Half marathon prediction using linear regression.*
 
 ## Description of folders
 The strava-app is the front end of the applications made in React. The node folder is the server
