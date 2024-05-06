@@ -12,7 +12,7 @@ This application takes data from the Strava API to analyse a user's data. The ap
 ![Screenshot 3](./images/screen3.jpg)
 *An athlete's pace graph*
 
-![Screenshot 3](./images/screen3.jpg)
+![Screenshot 4](./images/screen4.jpg)
 *Half marathon prediction using linear regression.*
 
 ## Description of folders
