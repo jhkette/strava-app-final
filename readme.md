@@ -16,6 +16,7 @@ This application takes data from the Strava API to analyse a user's data. The ap
 *Half marathon prediction using linear regression.*
 
 ## Description of folders
+
 The strava-app is the front end of the applications made in React. The node folder is the server
 made using node/express. The cypress folder just contains end to end testing files.
 
