@@ -1,17 +1,30 @@
 import React from "react";
+import GoogleMapReact from 'google-map-react';
 import LineChart from "./components/LineChart";
 import DoughnutChart from "./components/Doughnut";
 import RidechartRegression from "./components/RideChartRegression";
 import Ftp from "./components/Ftp";
+
 // cycling page
 export default function Cycling({
   userRecords,
-  alpedataset,
+ 
   hardknott,
   scotland,
   ftp,
   weight,
 }) {
+
+  const AnyReactComponent = ({ text }) => <div>{text}</div>;
+
+
+  const defaultProps = {
+    center: {
+      lat: 54.15241,
+      lng: -2
+    },
+    zoom: 6
+  };
   return (
     <section className="min-h-screen w-full py-4 px-24">
       <h1 className="text-2xl font-bold py-8 ">Power Chart</h1>
@@ -98,6 +111,20 @@ export default function Cycling({
           <Ftp ftp={ftp} />
         </div>
       </section>
+      <div style={{ height: '50vh', width: '50 %' }}>
+      <GoogleMapReact
+        bootstrapURLKeys={{ key: "AIzaSyCe3QhH1ZHrGz3jRZFhhojd-LPtov-otH8" }}
+        defaultCenter={defaultProps.center}
+        defaultZoom={defaultProps.zoom}
+      >
+        <AnyReactComponent
+         
+          lat={54.15241}
+          lng={-2}
+          text="My Marker"
+        />
+      </GoogleMapReact>
+    </div>
     </section>
   );
 }

@@ -162,7 +162,14 @@ export default function RunchartRegression({ userRecords, event, regdata }) {
    * Returns human readable time as an object {hh:mm} or {mm:ss}
   */
   function humanDuration(time) {
-    return intervalToDuration({ start: 0, end: time * 1000 });
+    const times = intervalToDuration({ start: 0, end: time * 1000 });
+    if (times["minutes"] < 10 && times["hours"]){
+      times["minutes"] = "0"+times["minutes"]
+    }
+    if (times["seconds"] < 10){
+      times["seconds"] = "0"+times["seconds"]
+    }
+    return times
   }
 
    // gets pacing for event
@@ -208,8 +215,8 @@ export default function RunchartRegression({ userRecords, event, regdata }) {
         {event} prediction: {predFormat["hours"]}:{predFormat["minutes"]}
       </p>
       <p className="  text-lg">
-        Recommended pace:   {recPace[0]["minutes"]}: {recPace[0]["seconds"]< 10 ? '0' +recPace[0]['seconds'] : recPace[0]["seconds"] } per/mile
-       or {recPace[1]["minutes"]}: {recPace[1]["seconds"]< 10 ? '0' +recPace[1]['seconds'] : recPace[1]["seconds"] } per/km
+        Recommended pace:   {recPace[0]["minutes"]}: {recPace[0]["seconds"] } per/mile
+       or {recPace[1]["minutes"]}: {recPace[1]["seconds"] } per/km
       </p>
     
     

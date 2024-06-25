@@ -56,7 +56,7 @@ exports.getAthlete = async (req, res) => {
  *  and so on. I then run a checkPbs function to see if pbs have improved
  * This is called by the client when they login - so client updates
  * automatically
-**/
+ **/
 exports.getLatestActivities = async (req, res) => {
   // we need t
   const errors = {};
@@ -66,109 +66,111 @@ exports.getLatestActivities = async (req, res) => {
     errors["error"] = "Permission not granted";
     return res.send(errors);
   }
+  try {
+    let response = await axios.get(
+      `https://www.strava.com/api/v3/athlete/activities`,
+      {
+        headers: { Authorization: token },
+        params: { after: after },
+      }
+    );
 
-  let response = await axios.get(
-    `https://www.strava.com/api/v3/athlete/activities`,
-    {
-      headers: { Authorization: token },
-      params: { after: after },
+    if (response.data.length == 0) {
+      errors["error"] = "no activities found";
+      return res.send(errors);
     }
-  );
 
-  if (response.data.length == 0) {
-    errors["error"] = "no activities found";
-    return res.send(errors);
-  }
+    const data_list = [...response.data];
 
-  const data_list = [...response.data];
+    const { id } = data_list[0].athlete;
+    // equality check for latest actviity on mongo vs latest new activity
+    const allActs = await UserActivities.findOne({ athlete_id: id });
 
-  const { id } = data_list[0].athlete;
-  // equality check for latest actviity on mongo vs latest new activity
-  const allActs = await UserActivities.findOne({ athlete_id: id });
+    //the last activities to check its not the latest one.
+    if (
+      allActs.activities[allActs.activities.length - 1].id ==
+      data_list[data_list.length - 1].id
+    ) {
+      errors["error"] = "this activity has already been added";
+      return res.send(errors);
+    }
+    // get all extra data for each activities i.e watts, distance 'streams'
+    const data_set = await activityLoop(data_list, token);
 
-  //the last activities to check its not the latest one.
-  if (
-    allActs.activities[allActs.activities.length - 1].id ==
-    data_list[data_list.length - 1].id
-  ) {
-    errors["error"] = "this activity has already been added";
-    return res.send(errors);
-  }
-   // get all extra data for each activities i.e watts, distance 'streams'
-  const data_set = await activityLoop(data_list, token);
+    /* checkPBs  = this is to check if there are new pbs - the helper function returns this destructured array */
+    const [
+      cyclingAllTime,
+      runAllTime,
+      updateFlagCycling,
+      updateFlagRunning,
+      ftpChange,
+    ] = checkPbs(data_set, allActs.cyclingpbs, allActs.runningpbs);
 
-  /* checkPBs  = this is to check if there are new pbs - the helper function returns this destructured array */
-  const [
-    cyclingAllTime,
-    runAllTime,
-    updateFlagCycling,
-    updateFlagRunning,
-    ftpChange,
-  ] = checkPbs(data_set, allActs.cyclingpbs, allActs.runningpbs);
+    if (updateFlagCycling) {
+      // if updatepb flag is true - update DB
 
-  if (updateFlagCycling) {
-    // if updatepb flag is true - update DB
-    console.log(cyclingAllTime);
+      await UserActivities.updateOne(
+        { athlete_id: id },
+        {
+          $set: {
+            cyclingpbs: cyclingAllTime,
+          },
+        }
+      );
+    }
+
+    if (updateFlagRunning) {
+      // if updatepb flag is true - update DB
+
+      await UserActivities.updateOne(
+        { athlete_id: id },
+        {
+          $set: {
+            runningpbs: runAllTime,
+          },
+        }
+      );
+    }
+
+    if (ftpChange) {
+      const amendedFTP = calcFtp(cyclingAllTime);
+      // update ftp if needed
+      await UserActivities.updateOne(
+        { athlete_id: id },
+        {
+          $set: {
+            cyclingFTP: amendedFTP,
+          },
+        }
+      );
+    }
+
+    //add tss score to each activity
+    for (element of data_set) {
+      const finalTss = calculateTss(
+        element,
+        allActs.cyclingFTP,
+        allActs.bikeHrZones,
+        allActs.runHrZones
+      );
+      element["tss"] = finalTss;
+    }
+
     await UserActivities.updateOne(
       { athlete_id: id },
-      {
-        $set: {
-          cyclingpbs: cyclingAllTime,
-        },
-      }
+      { $push: { activities: { $each: data_set } } }
     );
+    return res.send(data_set);
+  } catch (err) {
+    console.log(err);
   }
-
-  if (updateFlagRunning) {
-    // if updatepb flag is true - update DB
-  
-    await UserActivities.updateOne(
-      { athlete_id: id },
-      {
-        $set: {
-          runningpbs: runAllTime,
-        },
-      }
-    );
-  }
-
-  if (ftpChange) {
-    const amendedFTP = calcFtp(cyclingAllTime);
-    // update ftp if needed
-    await UserActivities.updateOne(
-      { athlete_id: id },
-      {
-        $set: {
-          cyclingFTP: amendedFTP,
-        },
-      }
-    );
-  }
-
-  //add tss score to each activity
-  for (element of data_set) {
-    const finalTss = calculateTss(
-      element,
-      allActs.cyclingFTP,
-      allActs.bikeHrZones,
-      allActs.runHrZones
-    );
-    element["tss"] = finalTss;
-  }
-
-  await UserActivities.updateOne(
-    { athlete_id: id },
-    { $push: { activities: { $each: data_set } } }
-  );
-  return res.send(data_set);
-
 };
 /**
- * 
+ *
  *  Bulk Imports all activities (200)
  *  loops through and adds running/cycling pbs
  *  maxhr, tss for each activiy
- * This will take up to an hour because 
+ * This will take up to an hour because
  * of strava rate limit - so sleep function is called every 98 calls
  */
 
@@ -190,9 +192,9 @@ exports.importActivities = async (req, res) => {
 
   let page_num = 1;
   const data_list = []; // used to store activities
-  try { // get 200 activities through this loop
+  try {
+    // get 200 activities through this loop
     while (page_num <= 5) {
-    
       let response = await axios.get(
         `https://www.strava.com/api/v3/athlete/activities`,
         {
@@ -233,11 +235,11 @@ exports.importActivities = async (req, res) => {
   const ftp = calcFtp(allTime);
   // calc maxHR for cycling
   const maxCyclingHr = calcMaxHr(bikeActivities, "ride");
-    // calc maxHR for running
+  // calc maxHR for running
   const runMaxHr = calcMaxHr(runActivities, "run");
-   // calc  hrzones
+  // calc  hrzones
   const bikeZones = getHrZones(maxCyclingHr);
-   // calc hrzones
+  // calc hrzones
   const runZones = getHrZones(runMaxHr);
   // calculate TSS for each activity
   for (element of data_set) {
@@ -308,9 +310,7 @@ exports.importActivities = async (req, res) => {
         cyclingMaxHr: maxCyclingHr,
         runningMaxHr: runMaxHr,
       },
-    },
-
-  
+    }
   );
 
   // the user is not going to need the data
