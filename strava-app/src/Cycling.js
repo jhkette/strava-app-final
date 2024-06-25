@@ -111,20 +111,7 @@ export default function Cycling({
           <Ftp ftp={ftp} />
         </div>
       </section>
-      <div style={{ height: '50vh', width: '50 %' }}>
-      <GoogleMapReact
-        bootstrapURLKeys={{ key: "AIzaSyCe3QhH1ZHrGz3jRZFhhojd-LPtov-otH8" }}
-        defaultCenter={defaultProps.center}
-        defaultZoom={defaultProps.zoom}
-      >
-        <AnyReactComponent
-         
-          lat={54.15241}
-          lng={-2}
-          text="My Marker"
-        />
-      </GoogleMapReact>
-    </div>
+      
     </section>
   );
 }
