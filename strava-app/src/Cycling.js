@@ -15,7 +15,7 @@ export default function Cycling({
   weight,
 }) {
 
-  const AnyReactComponent = ({ text }) => <div>{text}</div>;
+
 
 
   const defaultProps = {

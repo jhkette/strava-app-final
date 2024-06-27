@@ -19,7 +19,7 @@ exports.authorisation = async (req, res) => {
     return res.status(400).send(errors);
   }
 
-  res.cookie("token", token.access_token);
+  res.cookie("token", token.access_token,  {maxAge: 600*1000});
   return res.redirect(process.env.ORIGIN);
 };
 // exports logout
