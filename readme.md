@@ -22,7 +22,7 @@ made using node/express. The cypress folder just contains end to end testing fil
 
 ## The Live site
 
-[http://167.99.88.7/](http://167.99.88.7/).
+[http://159.65.83.17/](http://159.65.83.17/)/).
 
 Please use the test Strava account I have given at the top of the report for authentication. 
 
